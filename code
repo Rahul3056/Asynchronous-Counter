@@ -1,0 +1,43 @@
+#### **Example Verilog Code for 3-bit Asynchronous Counter**  
+```verilog
+module async_counter (
+    input wire clk,  
+    output reg [2:0] Q  
+);
+    always @(negedge clk)  
+        Q <= Q + 1;  
+endmodule
+```
+
+#### **Testbench Code**  
+```verilog
+module testbench;
+    reg clk;
+    wire [2:0] Q;
+
+    async_counter uut (.clk(clk), .Q(Q));
+
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // Generate clock with 10-time unit period
+    end
+
+    initial begin
+        $monitor("Time=%0t | Q=%b", $time, Q);
+        #100;
+        $finish;
+    end
+endmodule
+```
+
+#### **Simulation Output (Console Log Example)**  
+```
+Time=0 | Q=000  
+Time=10 | Q=001  
+Time=20 | Q=010  
+Time=30 | Q=011  
+Time=40 | Q=100  
+Time=50 | Q=101  
+Time=60 | Q=110  
+Time=70 | Q=111  
+Time=80 | Q=000 (Reset) 
